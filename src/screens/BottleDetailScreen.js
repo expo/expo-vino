@@ -9,10 +9,15 @@ import BottleDetailView from '../components/BottleDetailView';
 import type { Bottle } from '../types';
 
 type Props = {
+  navigation: any,
   bottle: Bottle,
 };
 
 export default class BottleDetailScreen extends React.Component<Props> {
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.bottle.style}`,
+  });
+
   render() {
     const { params } = this.props.navigation.state;
     console.log(params);
