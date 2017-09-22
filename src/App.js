@@ -5,6 +5,8 @@
 import React from 'react';
 import CameraScreen from './screens/CameraScreen';
 import CollectionScreen from './screens/CollectionScreen';
+import DetailScreen from './screens/DetailScreen';
+
 import type { Bottle } from '../types';
 
 type Props = {};
@@ -52,6 +54,7 @@ export default class App extends React.Component<Props, State> {
   };
 
   render() {
-    return <CollectionScreen bottles={this.state.bottles} />;
+    // return <CollectionScreen bottles={this.state.bottles} />;
+    return <DetailScreen bottle={this.state.bottles[1]} />;
   }
 }
