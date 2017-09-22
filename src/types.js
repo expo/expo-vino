@@ -17,7 +17,7 @@ export type Winery = {
   location: Location,
 };
 export type Bottle = {
-  name: string,
+  name?: string,
   style: string,
   purchasedOn?: Date,
   inStock: number,

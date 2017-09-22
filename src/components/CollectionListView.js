@@ -3,18 +3,19 @@
  */
 
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 
 import BottleListItem from '../components/BottleListItem';
 import type { Bottle } from '../types';
 
 type Props = {
+  onSelectBottle: (bottle: Bottle) => void,
   bottles: Bottle[],
 };
 
 type State = {};
 
-export default class CollectionScreen extends React.Component<Props, State> {
+export default class CollectionListView extends React.Component<Props, State> {
   state = {};
 
   render() {
@@ -22,11 +23,15 @@ export default class CollectionScreen extends React.Component<Props, State> {
       <View style={styles.container}>
         <FlatList
           data={this.props.bottles}
-          renderItem={elem => <BottleListItem bottle={elem.item} />}
+          renderItem={elem => <BottleListItem bottle={elem.item} onPressItem={this._onPressItem} />}
         />
       </View>
     );
   }
+
+  _onPressItem = bottle => {
+    this.props.onSelectBottle(bottle);
+  };
 }
 
 const styles = StyleSheet.create({
