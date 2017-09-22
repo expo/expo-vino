@@ -20,7 +20,6 @@ export default class BottleDetailScreen extends React.Component<Props> {
 
   render() {
     const { params } = this.props.navigation.state;
-    console.log(params);
     return (
       <View style={styles.container}>
         <BottleDetailView bottle={params.bottle} />
