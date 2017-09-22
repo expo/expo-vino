@@ -3,60 +3,103 @@
  */
 
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import { Camera } from 'expo';
+import FadeView from './FadeView';
 
-const Modes = {
+export const Modes = {
   CAMERA: 1,
   IMAGE_PREVIEW: 2,
   GALLERY: 3,
 };
 
+export type ModesT = $Values<typeof Modes>;
+
+type MaybePromiseFn<X> = () => X | Promise<X>;
+
 type Props = {
-  renderCameraUI: (onTakePicture: () => Promise<void>) => React.Element<*>,
+  renderCameraUI: ({
+    mode: ModesT,
+    onTakePicture: MaybePromiseFn<void>,
+    onDiscard: MaybePromiseFn<void>,
+  }) => React.Element<*>,
 };
 
 type State = {
-  mode: $Values<typeof Modes>,
+  mode: ModesT,
+  currentPictureData: ?{
+    width: number,
+    height: number,
+    uri: string,
+  },
+  previewVisible: boolean,
+  blackoutCamera: boolean,
 };
 
 export default class ImageCaptureView extends React.Component<Props, State> {
   state = {
     mode: Modes.CAMERA,
+    currentPictureData: null,
+    previewVisible: false,
+    blackoutCamera: false,
   };
 
   _cameraRef: ?Camera;
 
   render() {
-    let modeView;
+    let overlayView = null;
     switch (this.state.mode) {
-      case Modes.CAMERA:
-        modeView = this.renderCamera();
-        break;
       case Modes.IMAGE_PREVIEW:
-        modeView = this.renderImagePreview();
+        overlayView = this.renderImagePreview();
         break;
       case Modes.GALLERY:
-        modeView = this.renderGallery();
+        overlayView = this.renderGallery();
         break;
-      default:
-        throw new Error('Invalid mode');
     }
 
-    return <View style={styles.container}>{modeView}</View>;
+    return (
+      <View style={styles.container}>
+        <View style={StyleSheet.absoluteFill}>{this.renderCamera()}</View>
+        <View style={StyleSheet.absoluteFill} pointerEvents={overlayView ? 'auto' : 'none'}>
+          {overlayView}
+        </View>
+        <View style={StyleSheet.absoluteFill}>
+          <View style={{ flex: 1 }}>
+            {this.props.renderCameraUI({
+              mode: this.state.mode,
+              onTakePicture: this.onTakePicture,
+              onDiscard: this.onDiscard,
+            })}
+          </View>
+        </View>
+      </View>
+    );
   }
 
   renderCamera() {
     return (
-      <Camera ref={this.getCameraRef} style={{ flex: 1 }} type={Camera.Constants.Type.Back}>
-        <View style={{ flex: 1 }}>{this.props.renderCameraUI(this.onTakePicture)}</View>
-      </Camera>
+      <View style={{ flex: 1 }}>
+        <Camera ref={this.getCameraRef} style={{ flex: 1 }} type={Camera.Constants.Type.Back} />
+        <FadeView style={StyleSheet.absoluteFill} visible={this.state.blackoutCamera}>
+          <View style={{ flex: 1, backgroundColor: 'black' }} />
+        </FadeView>
+      </View>
     );
   }
 
   renderImagePreview() {
-    // <ImageResultView imageData={this.state.capturedImageData} />;
-    return <View />;
+    return (
+      <FadeView
+        style={{
+          flex: 1,
+          backgroundColor: 'black',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        visible={!!this.state.previewVisible}>
+        <Image style={{ flex: 1 }} resizeMode="contain" source={this.state.currentPictureData} />
+      </FadeView>
+    );
   }
 
   renderGallery() {
@@ -64,12 +107,55 @@ export default class ImageCaptureView extends React.Component<Props, State> {
   }
 
   onTakePicture = async () => {
-    // take the picture, get the data, switch modes to IMAGE_PREVIEW
-    if (!this._cameraRef) {
+    if (this.state.isTakingPicture) {
       return;
     }
-    const pictureResult = await this._cameraRef.takePictureAsync();
-    console.log(pictureResult);
+    // take the picture, get the data, switch modes to IMAGE_PREVIEW
+    try {
+      if (!this._cameraRef) {
+        return;
+      }
+      const pictureResult = await this._cameraRef.takePictureAsync();
+      this.setState(
+        {
+          blackoutCamera: true,
+        },
+        async () => {
+          await delay(100);
+          this.setState(
+            {
+              mode: Modes.IMAGE_PREVIEW,
+              currentPictureData: pictureResult,
+            },
+            () => {
+              this.setState({
+                previewVisible: true,
+                blackoutCamera: false,
+              });
+            }
+          );
+        }
+      );
+    } catch (e) {
+      // ignore when we can't take a picture for some reason
+      this.setState({
+        blackoutCamera: false,
+      });
+    }
+  };
+
+  onDiscard = () => {
+    this.setState(
+      {
+        previewVisible: false,
+      },
+      async () => {
+        await delay(100);
+        this.setState({
+          mode: Modes.CAMERA,
+        });
+      }
+    );
   };
 
   getCameraRef = (cameraComponentRef: ?Camera) => {
@@ -77,8 +163,11 @@ export default class ImageCaptureView extends React.Component<Props, State> {
   };
 }
 
+const delay = duration => new Promise(resolve => setTimeout(resolve, duration));
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'black',
   },
 });

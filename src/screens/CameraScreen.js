@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Permissions } from 'expo';
 
 import CameraUI from '../components/CameraUI';
@@ -26,14 +26,7 @@ export default class CameraScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.getCameraPermissions();
-  }
-
-  async getCameraPermissions() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({
-      hasCameraPermission: status === 'granted',
-    });
+    this._getCameraPermissions();
   }
 
   render() {
@@ -45,13 +38,32 @@ export default class CameraScreen extends React.Component<Props, State> {
     } else {
       return (
         <View style={styles.container}>
+          <StatusBar hidden />
           <ImageCaptureView
-            renderCameraUI={onTakePicture => <CameraUI onTakePicture={onTakePicture} />}
+            renderCameraUI={({ mode, onTakePicture, onDiscard }) => (
+              <CameraUI
+                mode={mode}
+                onCancel={this._onCancel}
+                onDiscard={onDiscard}
+                onTakePicture={onTakePicture}
+              />
+            )}
           />
         </View>
       );
     }
   }
+
+  async _getCameraPermissions() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({
+      hasCameraPermission: status === 'granted',
+    });
+  }
+
+  _onCancel = () => {
+    console.log('Cancel!');
+  };
 }
 
 const styles = StyleSheet.create({
