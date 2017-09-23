@@ -9,7 +9,9 @@ import { Permissions } from 'expo';
 import CameraUI from '../components/CameraUI';
 import ImageCaptureView from '../components/ImageCaptureView';
 
-type Props = {};
+type Props = {
+  navigation: any,
+};
 
 type State = {
   hasCameraPermission: boolean,
@@ -62,7 +64,7 @@ export default class CameraScreen extends React.Component<Props, State> {
   }
 
   _onCancel = () => {
-    console.log('Cancel!');
+    this.props.navigation.goBack();
   };
 }
 

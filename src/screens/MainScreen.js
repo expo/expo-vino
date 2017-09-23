@@ -3,9 +3,11 @@
  */
 
 import * as React from 'react';
-import { View } from 'react-native';
-import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
+import { StackNavigator, TabNavigator } from 'react-navigation';
+import { Entypo, Ionicons } from '@expo/vector-icons';
+
+import TabBarWithActionButton from '../components/TabBarWithActionButton';
 
 class DummyScreen extends React.Component<{}> {
   render() {
@@ -73,10 +75,50 @@ const SettingsTabStack = StackNavigator(
   }
 );
 
-class TabBarWithActionButton extends React.Component<{}> {
+class TabBarWithCameraButton extends React.Component<{}> {
   render() {
-    return <TabBarBottom {...this.props} />;
+    return (
+      <TabBarWithActionButton
+        extraTabsAtIndicies={{
+          '2': () => (
+            <TouchableWithoutFeedback onPress={this._onCameraPress}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: -10,
+                }}>
+                <View
+                  style={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: 35,
+                    borderWidth: StyleSheet.hairlineWidth,
+                    borderColor: 'rgba(0, 0, 0, .3)',
+                    backgroundColor: '#142763',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Entypo
+                    name="camera"
+                    size={35}
+                    color="white"
+                    style={{ backgroundColor: 'transparent' }}
+                  />
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          ),
+        }}
+        {...this.props}
+      />
+    );
   }
+
+  _onCameraPress = () => {
+    this.props.navigation.navigate('Camera');
+  };
 }
 
 /**
@@ -90,7 +132,7 @@ const Tabs = TabNavigator(
     SettingsTab: { screen: SettingsTabStack },
   },
   {
-    tabBarComponent: TabBarWithActionButton,
+    tabBarComponent: TabBarWithCameraButton,
     tabBarOptions: {
       activeTintColor: '#142763',
       labelStyle: {
