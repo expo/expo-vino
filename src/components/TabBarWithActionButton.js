@@ -1,5 +1,5 @@
 /**
- * @flow
+ * @noflow
  */
 
 import * as React from 'react';
@@ -38,7 +38,6 @@ export default class TabBarWithActionButton extends TabBarBottom {
       jumpToIndex,
       activeBackgroundColor,
       inactiveBackgroundColor,
-      style,
       tabStyle,
     } = this.props;
     const { routes } = navigation.state;

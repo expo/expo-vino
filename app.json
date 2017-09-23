@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "expo-wine",
+    "name": "ExpoVino",
     "description": "An empty new project",
-    "slug": "expo-wine",
+    "slug": "expo-vino",
     "privacy": "public",
     "sdkVersion": "21.0.0",
     "version": "1.0.0",
