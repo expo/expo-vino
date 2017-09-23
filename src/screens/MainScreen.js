@@ -20,6 +20,7 @@ class DummyScreen extends React.Component<{}> {
  */
 const CollectionTabStack = StackNavigator(
   {
+    AddReview: { getScreen: () => require('./AddReviewScreen').default },
     Collection: { getScreen: () => require('./CollectionScreen').default },
     BottleDetail: { getScreen: () => require('./BottleDetailScreen').default },
   },
