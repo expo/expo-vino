@@ -31,7 +31,7 @@ export default class LevelSelector extends React.Component<Props, State> {
     const { selectedLevel } = this.state;
 
     const selectables = [...Array(maxLevels).keys()].map(level => {
-      <View onClick={this._setLevel(level)}>
+      <View onClick={this._setLevel.bind(this, level)}>
         <Text>x</Text>
         <Image
           source={{ uri: icon }}
@@ -42,11 +42,7 @@ export default class LevelSelector extends React.Component<Props, State> {
         />
       </View>;
     });
-    return (
-      <View style={styles.container}>
-        {selectables}
-      </View>
-    );
+    return <View style={styles.container}>{selectables}</View>;
   }
 }
 
