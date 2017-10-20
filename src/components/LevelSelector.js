@@ -37,7 +37,7 @@ export default class LevelSelector extends React.Component<Props, State> {
           onPress={() => this._setLevel(level)}>
           <View>
             <Image
-              source={{ uri: icon }}
+              source={icon}
               style={{
                 height: 50,
                 width: 50,
