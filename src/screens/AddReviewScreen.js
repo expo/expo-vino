@@ -36,6 +36,7 @@ export default class BottleDetailScreen extends React.Component<Props, State> {
         <LevelSelector
           icon="http://files.shandymedia.com/wp-content/uploads/2017/05/13205435/obsev-new-emojis-5.jpg"
           maxLevels={5}
+          level={this.state.borrachos}
           onSelect={level => this.setState({ borrachos: level })}
         />
         <Text>Tasting Notes</Text>
