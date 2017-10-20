@@ -27,9 +27,8 @@ const CollectionTabStack = StackNavigator(
   {
     initialRouteName: 'AddReview',
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-wine-outline" size={24} color={tintColor} />
-      ),
+      tabBarIcon: ({ tintColor }) =>
+        <Ionicons name="ios-wine-outline" size={24} color={tintColor} />,
       tabBarLabel: 'Collection',
     },
   }
@@ -41,9 +40,8 @@ const MapTabStack = StackNavigator(
   },
   {
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-map-outline" size={24} color={tintColor} />
-      ),
+      tabBarIcon: ({ tintColor }) =>
+        <Ionicons name="ios-map-outline" size={24} color={tintColor} />,
       tabBarLabel: 'Map',
     },
   }
@@ -55,9 +53,8 @@ const FriendsTabStack = StackNavigator(
   },
   {
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-people-outline" size={30} color={tintColor} />
-      ),
+      tabBarIcon: ({ tintColor }) =>
+        <Ionicons name="ios-people-outline" size={30} color={tintColor} />,
       tabBarLabel: 'Friends',
     },
   }
@@ -69,9 +66,8 @@ const SettingsTabStack = StackNavigator(
   },
   {
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-menu-outline" size={30} color={tintColor} />
-      ),
+      tabBarIcon: ({ tintColor }) =>
+        <Ionicons name="ios-menu-outline" size={30} color={tintColor} />,
       tabBarLabel: 'Settings',
     },
   }
@@ -82,7 +78,7 @@ class TabBarWithCameraButton extends React.Component<{}> {
     return (
       <TabBarWithActionButton
         extraTabsAtIndicies={{
-          '2': () => (
+          '2': () =>
             <TouchableWithoutFeedback onPress={this._onCameraPress}>
               <View
                 style={{
@@ -110,8 +106,7 @@ class TabBarWithCameraButton extends React.Component<{}> {
                   />
                 </View>
               </View>
-            </TouchableWithoutFeedback>
-          ),
+            </TouchableWithoutFeedback>,
         }}
         {...this.props}
       />
@@ -150,6 +145,7 @@ const Tabs = TabNavigator(
 export default StackNavigator(
   {
     Tabs: { screen: Tabs },
+    Edit: { getScreen: () => require('./AddReviewScreen').default },
     Camera: { getScreen: () => require('./CameraScreen').default },
   },
   {

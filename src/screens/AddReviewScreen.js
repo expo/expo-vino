@@ -38,9 +38,13 @@ export default class BottleDetailScreen extends React.Component<Props, State> {
   };
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <ScrollView style={styles.container}>
-        <Button title="Add to Collection" />
+        <Button
+          title="Add to Collection"
+          onPress={() => navigate('Collection')}
+        />
         <View style={styles.section}>
           <Text>Reviewer</Text>
           <TextInput
