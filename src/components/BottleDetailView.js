@@ -6,6 +6,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import GrowLocation from '../components/GrowLocation';
+import AddReviewScreen from '../screens/AddReviewScreen';
 import type { Bottle } from '../types';
 
 type Props = {
@@ -21,10 +22,17 @@ export default class BottleDetailView extends React.Component<Props, State> {
     const bottle = this.props.bottle;
     return (
       <View style={styles.container}>
-        <Text>{bottle.winery.name}</Text>
-        <Text>{bottle.style}</Text>
-        <Text>{bottle.yearProduced}</Text>
+        <Text>
+          {bottle.winery.name}
+        </Text>
+        <Text>
+          {bottle.style}
+        </Text>
+        <Text>
+          {bottle.yearProduced}
+        </Text>
         <GrowLocation winery={bottle.winery} />
+        <AddReviewScreen bottle={bottle} />
       </View>
     );
   }

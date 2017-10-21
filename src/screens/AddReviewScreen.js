@@ -28,7 +28,7 @@ type Props = {
 type State = {};
 
 export default class BottleDetailScreen extends React.Component<Props, State> {
-  state = {
+  defaultState = {
     who: '',
     borrachos: undefined,
     rating: undefined,
@@ -36,15 +36,41 @@ export default class BottleDetailScreen extends React.Component<Props, State> {
     pairings: [],
     notes: '',
   };
+  _stateFromBottle = bottle => {
+    if (bottle) {
+      return {
+        ...bottle.review,
+        showSubmitButton: !bottle,
+      };
+    } else {
+      return { showSubmitButton: true };
+    }
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showSubmitButton: false,
+      ...this.defaultState,
+      ...this._stateFromBottle(this.props.bottle),
+    };
+  }
 
   render() {
-    const { navigate } = this.props.navigation;
+    const navigate = this.props.navigation && this.props.navigation.navigate;
+    const submitButton =
+      this.state.showSubmitButton && navigate
+        ? <Button
+            title="Add to Collection"
+            onPress={() => {
+              this.props.screenProps.addBottle(this.state);
+              navigate('Collection');
+            }}
+          />
+        : null;
     return (
       <ScrollView style={styles.container}>
-        <Button
-          title="Add to Collection"
-          onPress={() => navigate('Collection')}
-        />
+        {submitButton}
         <View style={styles.section}>
           <Text>Reviewer</Text>
           <TextInput
