@@ -145,7 +145,6 @@ const Tabs = TabNavigator(
 export default StackNavigator(
   {
     Tabs: { screen: Tabs },
-    Edit: { getScreen: () => require('./AddReviewScreen').default },
     Camera: { getScreen: () => require('./CameraScreen').default },
   },
   {

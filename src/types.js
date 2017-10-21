@@ -10,6 +10,9 @@ export type Review = {
   who: string,
   when: Date,
   borrachos: number,
+  rating: number,
+  color: number,
+  pairings: [string],
   notes: string,
 };
 export type Winery = {
