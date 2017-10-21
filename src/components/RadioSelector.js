@@ -32,7 +32,7 @@ export default class RadioSelector extends React.Component<Props, State> {
             style={{
               height: 50,
               width: 50,
-              opacity: item === selection ? 1.0 : 0.5,
+              opacity: item === selection ? 1.0 : 0.25,
             }}>
             {options[item]}
           </View>

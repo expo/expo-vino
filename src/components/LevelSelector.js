@@ -41,7 +41,7 @@ export default class LevelSelector extends React.Component<Props, State> {
               style={{
                 height: 50,
                 width: 50,
-                opacity: level <= selectedLevel ? 1.0 : 0.5,
+                opacity: level <= selectedLevel ? 1.0 : 0.25,
               }}
             />
           </View>
