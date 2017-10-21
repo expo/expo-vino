@@ -68,7 +68,24 @@ export default class App extends React.Component<{}> {
             globalState: this.state,
             addBottle: bottle => {
               this.setState({
-                bottles: [...this.state.bottles, bottle],
+                bottles: [
+                  ...this.state.bottles,
+                  {
+                    key: 10,
+                    style: 'a wine',
+                    yearProduced: 2014,
+                    winery: {
+                      name: 'somewhere',
+                      location: {
+                        lat: 38.475,
+                        lon: -122.815,
+                      },
+                    },
+                    image:
+                      'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540exponent%252Fexpo-wine/Camera/3192e05d-20e2-4763-8f7c-559daf7b1de1.jpg',
+                    reviews: [bottle],
+                  },
+                ],
               });
             },
           }}
