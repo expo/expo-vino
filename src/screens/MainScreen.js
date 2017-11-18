@@ -25,7 +25,7 @@ const CollectionTabStack = StackNavigator(
     BottleDetail: { getScreen: () => require('./BottleDetailScreen').default },
   },
   {
-    initialRouteName: 'AddReview',
+    initialRouteName: 'Collection',
     navigationOptions: {
       tabBarIcon: ({ tintColor }) =>
         <Ionicons name="ios-wine-outline" size={24} color={tintColor} />,
