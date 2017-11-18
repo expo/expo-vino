@@ -130,6 +130,7 @@ const Tabs = TabNavigator(
   },
   {
     tabBarComponent: TabBarWithCameraButton,
+    tabBarPosition: 'bottom',
     tabBarOptions: {
       activeTintColor: '#142763',
       labelStyle: {
