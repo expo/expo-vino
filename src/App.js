@@ -3,6 +3,7 @@
  */
 
 import * as React from 'react';
+import { Permissions, FileSystem } from 'expo';
 import { View, StatusBar } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import MainScreen from './screens/MainScreen';
@@ -23,6 +24,7 @@ const RootNavigator = StackNavigator(
 
 export default class App extends React.Component<{}> {
   state = {
+    nextId: 3,
     bottles: [
       {
         key: 1,
@@ -62,27 +64,32 @@ export default class App extends React.Component<{}> {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar hidden={false} />
+        <StatusBar hidden={true} />
         <RootNavigator
           screenProps={{
             globalState: this.state,
-            addBottle: bottle => {
+            addBottle: async bottle => {
+              const bottleId = this.state.nextId;
+              const permanentLocation = FileSystem.documentDirectory + bottleId;
+              const irData = fakeImageRecognitionData[bottleId % fakeImageRecognitionData.length];
+
+              await FileSystem.copyAsync({
+                from: FileSystem.cacheDirectory + 'latestPicture',
+                to: permanentLocation,
+              });
               this.setState({
+                nextId: this.state.nextId + 1,
                 bottles: [
                   ...this.state.bottles,
                   {
-                    key: 10,
-                    style: 'a wine',
-                    yearProduced: 2014,
+                    key: bottleId,
+                    style: irData.style,
+                    yearProduced: irData.yearProduced,
                     winery: {
-                      name: 'somewhere',
-                      location: {
-                        lat: 38.475,
-                        lon: -122.815,
-                      },
+                      name: irData.winery.name,
+                      location: irData.winery.location,
                     },
-                    image:
-                      'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540exponent%252Fexpo-wine/Camera/3192e05d-20e2-4763-8f7c-559daf7b1de1.jpg',
+                    image: permanentLocation,
                     reviews: [bottle],
                   },
                 ],
@@ -94,3 +101,40 @@ export default class App extends React.Component<{}> {
     );
   }
 }
+
+const fakeImageRecognitionData = [
+  {
+    style: 'water',
+    yearProduced: 2017,
+    winery: {
+      name: 'La Croix',
+      location: {
+        lat: 38.436,
+        lon: -122.817,
+      },
+    },
+  },
+  {
+    style: 'water',
+    yearProduced: 2017,
+    winery: {
+      name: 'San Pelligrino',
+      location: {
+        lat: 38.425,
+        lon: -122.815,
+      },
+    },
+  },
+  {
+    style: 'brown ale',
+    yearProduced: 2017,
+    winery: {
+      name: 'New Belgium',
+      location: {
+        lat: 38.426,
+        lon: -122.816,
+      },
+    },
+  },
+
+]

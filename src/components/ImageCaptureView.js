@@ -23,6 +23,7 @@ type Props = {
     onTakePicture: MaybePromiseFn<void>,
     onDiscard: MaybePromiseFn<void>,
   }) => React.Element<*>,
+  handlePicture: MaybePromiseFn<void>
 };
 
 type State = {
@@ -132,6 +133,7 @@ export default class ImageCaptureView extends React.Component<Props, State> {
                 previewVisible: true,
                 blackoutCamera: false,
               });
+              this.props.handlePicture(pictureResult);
             }
           );
         }

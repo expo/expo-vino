@@ -4,13 +4,14 @@
 
 import React from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
-import { Permissions } from 'expo';
+import { Permissions, FileSystem } from 'expo';
 
 import CameraUI from '../components/CameraUI';
 import ImageCaptureView from '../components/ImageCaptureView';
 
 type Props = {
   navigation: any,
+  onTakePicture: any,
 };
 
 type State = {
@@ -50,6 +51,7 @@ export default class CameraScreen extends React.Component<Props, State> {
                 onTakePicture={onTakePicture}
               />
             )}
+          handlePicture={this._storeImageAndNavigate}
           />
         </View>
       );
@@ -66,6 +68,14 @@ export default class CameraScreen extends React.Component<Props, State> {
   _onCancel = () => {
     this.props.navigation.goBack();
   };
+
+  _storeImageAndNavigate = async (imgData) => {
+    await FileSystem.copyAsync({
+      from: imgData.uri,
+      to: FileSystem.cacheDirectory + 'latestPicture',
+    });
+    this.props.navigation.navigate('AddReview');
+  }
 }
 
 const styles = StyleSheet.create({
